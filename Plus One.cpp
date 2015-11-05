@@ -7,32 +7,27 @@ The digits are stored such that the most significant digit is at the head of the
 class Solution {
 public:
     vector<int> plusOne(vector<int>& digits) {
-        vector<int> result;
-        stack<int> stk;
-        int size = digits.size();
-        int i, left;
-        char ch;
-        unsigned long sum = 0;
+        vector<int>::iterator itr;
+        int carry = 0;
+        int sum = 0;
+        int plus_one = 1;
         
-        for (i = 0; i < size; i++) {
-            sum += (digits[size - 1 - i]) * pow(10, i);
+        for (itr = digits.end() - 1; itr >= digits.begin(); itr--) {
+            sum = *itr + carry + plus_one;
+            
+            if (sum > 9) {
+                *itr = sum - 10;
+                carry = 1;
+                plus_one = 0;
+                continue;
+            }
+            else {
+                *itr = sum;
+                return digits;
+            }
         }
-        sum += 1; //plus one
-        printf("%d\n", sum);
-        while (sum) {
-            left = sum % 10;
-            sum /= 10;
-            stk.push(left);
-        }
-        
-        size = stk.size();
-        
-        for (i = 0; i < size; i++) {
-            ch = stk.top();
-            result.push_back(ch);
-            stk.pop();
-        }
-
-        return result;
+        //reach here means overflow.
+        digits.insert(digits.begin(), 1);
+        return digits;
     }
 };
