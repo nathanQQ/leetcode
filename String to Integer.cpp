@@ -15,54 +15,34 @@ Subscribe to see which companies asked this question
 
 class Solution {
 public:
-    int myAtoi(string str) {
-        int size = str.size();
-        int sum = 0, cnt;
-        bool is_minus = false;
-        int limit = pow(2, 31);
-        
-        if (size == 0)
-            return 0;
-        
-        
-        for (cnt = 0; cnt < size; cnt++) {
-            if (str[cnt] < '0' || str[cnt] > '9') {
-                if (str[cnt] == '-') {
-                    if (cnt == 0) {
-                        is_minus = true;
-                        continue;
-                    }
-                    else {
-                        sum /= pow(10, size - cnt);
-                        break;
-                    }
-                }
-                else if (str[cnt] == '+') {
-                    if (cnt == 0) {
-                        continue;
-                    }
-                    else {
-                        sum /= pow(10, size - cnt);
-                        break;
-                    }
-                }
-                else if (str[cnt] == ' ')
-                    continue;
-                //not a valid string
-                else {
-                    sum /= pow(10, size - cnt);
-                    break;
-                }
+       int myAtoi(string str) {  
+            int num = 0;  
+            int sign =1;  
+            int len = str.size();  
+            int i = 0;  
+            
+            while (str[i] == ' ' && i < len) 
+                i++;
+                
+            if (str[i] == '+') 
+                i++;
+            else if (str[i] == '-') {
+                sign = -1; 
+                i++;
             }
-            sum += (str[cnt] - '0') * pow(10, size - 1 - cnt);
-            if (sum < 0) {
-                sum = limit - 1;
-                break;
-            }
-        }
-        if (is_minus)
-            return -sum;
-        else
-            return sum;
-    }
+            
+            for (; i < len; i++) {  
+                 if (str[i] == ' ') 
+                    break;  
+                 if (str[i] < '0' || str[i] > '9') 
+                    break;  
+                 if ((INT_MAX / 10 < num) || 
+                    (INT_MAX / 10 == num && INT_MAX % 10 < (str[i] -'0'))) {  
+                      return sign == -1 ? INT_MIN : INT_MAX;  
+                      break;  
+                 }  
+                 num = num * 10 + str[i] -'0';  
+            }  
+            return num * sign;  
+       }  
 };
